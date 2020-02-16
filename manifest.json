@@ -8,10 +8,7 @@
   "permissions": [
     "debugger",
     "storage",
-    "tabs",
-    "http://*/*",
-    "https://*/*",
-    "webRequest"
+    "activeTab"
   ],
   "web_accessible_resources": [
     "*"
