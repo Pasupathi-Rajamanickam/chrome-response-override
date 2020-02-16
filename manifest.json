@@ -1,23 +1,26 @@
 {
-	"name": "Chrome Response Override",
-	"version": "1.1",
-	"description": "Provides support to override API/HTML/* response using simple Find & Replace steps. No external app installation required",
-	"author": "Pasupathi Rajamanickam",
-	"devtools_page": "devtools/devtools.html",
-	"permissions": [
-		"debugger",
-		"storage",
-		"tabs",
-		"http://*/*",
-		"https://*/*",
-		"webRequest"
-	],
-	"web_accessible_resources": [
-		"*"
-	],
-	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-	"manifest_version": 2,
-	"icons":{
-		"128": "images/icon.png"
-	}
+  "name": "Chrome Response Override",
+  "short_name": "Chrome Response Override",
+  "version": "1.1",
+  "description": "Provides support to override API/HTML/* response using simple Find & Replace steps. No external app installation required",
+  "author": "Pasupathi Rajamanickam",
+  "devtools_page": "devtools/devtools.html",
+  "permissions": [
+    "debugger",
+    "storage",
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "webRequest"
+  ],
+  "web_accessible_resources": [
+    "*"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "manifest_version": 2,
+  "icons": {
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon.png"
+  }
 }

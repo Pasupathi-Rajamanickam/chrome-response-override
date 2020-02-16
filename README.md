@@ -5,11 +5,20 @@ Provide support to override API/HTML/* response using simple Find & Replace step
 
 Steps to override response body in chrome extension
 
-1) Open devtools, navigate to "Override Response Body" tab 
-2) Enter URL contains value, only this URL response body will be modified. 
-3) Enter Find value It's a javascript regex pattern. 
-4) Enter Replace value to replace with. 5) Once done, please click Cancel - Chrome, Stop Debugging - Opera.
+1) Open devtools, navigate to "Response Override" tab 
+2) Click "Add Row"
+3) Enter URL contains value only this URL resonse will be modified.
+4) Enter Find value It's a javascript regex pattern. 
+5) Enter Replace value to replace with. 
+6) Click "Save" to save everything.
+7) Click "Play" button to start modifying response.
+8) You must click pause button to stop this modification.
+9) You must keep this devtools open
 
-Ex. If you want to add new node in json. Find: "existingNode":"existingValue" Replace: "existingNode":"existingValue", "newNode": "newValue"
+Ex. If you want to add new node in json. 
+Find: "existingNode":"existingValue" 
+Replace: "existingNode":"existingValue", "newNode": "newValue"
 
-How This works: This devtools extension add network break point and listen to URL contains the user input Make API Client call and get response. Do Find and Replace on top of response. Serve the replaced response.s
+How This works: This devtools extension add network break point and listen to URL contains the user input Make API Client call and get response. Do Find and Replace on top of response. Serve the replaced response.
+
+Project space: https://github.com/Pasupathi-Rajamanickam/chrome-response-override
