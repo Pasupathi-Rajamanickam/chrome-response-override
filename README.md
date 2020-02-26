@@ -24,4 +24,6 @@ How This works: This devtools extension add network break point and listen to UR
 Project space: https://github.com/Pasupathi-Rajamanickam/chrome-response-override
 
 ## Contribution
-PR/Issues are welcome. Please refer <a href="https://github.com/Pasupathi-Rajamanickam/chrome-response-override/projects">Project space</a> to see if we have any ToDo items.
+### PR/Issues are welcome. 
+1. Please refer <a href="https://github.com/Pasupathi-Rajamanickam/chrome-response-override/projects">Project space</a> to see if we have any ToDo items. 
+2. Need clarification? Create an issue with card link.
