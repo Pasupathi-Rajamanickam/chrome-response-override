@@ -21,16 +21,14 @@ function ajaxMe(url, success, error) {
   }
 }
 function replaceResponse(response, filteredData, callback) {
-  var find = new RegExp(filteredData.find, "g");
-  callback(response.replace(find, filteredData.replace))
+  filteredData.forEach(filteredDatum => {
+    var find = new RegExp(filteredDatum.find, "g");
+    response = response.replace(find, filteredDatum.replace)
+  })
+  callback(response)
 }
 function checkURLTagged(url, replaceData) {
-  for (let i = 0; i < replaceData.length; i++) {
-    if (url.indexOf(replaceData[i].url) !== -1) {
-      return replaceData[i];
-    }
-  }
-  return false;
+  return replaceData.filter(replaceDatum => url.includes(replaceDatum.url));
 }
 
 let debugee = null;
@@ -50,10 +48,9 @@ function setupDebugger(target) {
       if (method === "Network.requestIntercepted") {
         chrome.storage.local.get("replaceData", (storageData) => {
           let filteredData = checkURLTagged(params.request.url, storageData.replaceData);
-          if (filteredData) {
+          if (filteredData.length > 0) {
             var responseLines = [];
             responseLines.push('HTTP/1.1 200 OK');
-            //responseLInes.push('Access-Control-Allow-Headers:Accept,Authorization,Content-TYpe,X-Custom-Header,DNT,X-CustomHeader,DNT,X-CustomHeader,Keep-Alive,User-Agent')
             ajaxMe(request.url, (data) => {
               replaceResponse(data.response, filteredData, (replacedData) => {
                 let headers = data.getAllResponseHeaders();
