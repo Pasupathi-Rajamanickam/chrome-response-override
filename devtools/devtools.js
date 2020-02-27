@@ -31,6 +31,18 @@ function checkURLTagged(url, replaceData) {
   return replaceData.filter(replaceDatum => url.includes(replaceDatum.url));
 }
 
+function submitResponse(filteredData, continueParams) {
+	let responseLines = [];
+  if (filteredData.contentType) {
+    responseLines.push(`Content-Type: ${filteredData.contentType}`);
+  }
+  responseLines.push('');
+  responseLines.push('');
+  responseLines.push(filteredData.replace);
+  continueParams.rawResponse = btoa(unescape(encodeURIComponent(responseLines.join('\r\n'))));
+  chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
+}
+
 let debugee = null;
 function setupDebugger(target) {
   debugee = { tabId: target.id };
@@ -51,21 +63,25 @@ function setupDebugger(target) {
           if (filteredData.length > 0) {
             var responseLines = [];
             responseLines.push('HTTP/1.1 200 OK');
-            ajaxMe(request.url, (data) => {
-              replaceResponse(data.response, filteredData, (replacedData) => {
-                let headers = data.getAllResponseHeaders();
-                responseLines.push(headers);
-                responseLines.push('');
-                responseLines.push('');
-                responseLines.push(replacedData);
-                continueParams.rawResponse = btoa(unescape(encodeURIComponent(responseLines.join('\r\n'))));
+            if (filteredData[0].find === '~NO_API~') {
+              submitResponse(filteredData[0], continueParams)
+            } else {
+              ajaxMe(request.url, (data) => {
+                replaceResponse(data.response, filteredData, (replacedData) => {
+                  let headers = data.getAllResponseHeaders();
+                  responseLines.push(headers);
+                  responseLines.push('');
+                  responseLines.push('');
+                  responseLines.push(replacedData);
+                  continueParams.rawResponse = btoa(unescape(encodeURIComponent(responseLines.join('\r\n'))));
+                  chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
+                });
+              }, (status) => {
+                responseLInes[0] = `HTTP/1.1 ${status}`;
+                continecontinueParams.rawResponse = btoa(responseLines.join('\r\n'));
                 chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
               });
-            }, (status) => {
-              responseLInes[0] = `HTTP/1.1 ${status}`;
-              continecontinueParams.rawResponse = btoa(responseLines.join('\r\n'));
-              chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
-            });
+            }
           } else {
             chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
           }

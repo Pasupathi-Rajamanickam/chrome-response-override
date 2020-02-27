@@ -1,7 +1,7 @@
 {
   "name": "Chrome Response Override",
   "short_name": "Chrome Response Override",
-  "version": "1.2",
+  "version": "1.3",
   "description": "Provides support to override API/HTML/* response using simple Find & Replace steps. No external app installation required",
   "author": "Pasupathi Rajamanickam",
   "devtools_page": "devtools/devtools.html",

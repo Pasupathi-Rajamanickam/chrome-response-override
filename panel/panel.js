@@ -39,6 +39,7 @@ function saveData() {
     data.url = tds[0].getElementsByTagName('input')[0].value
     data.find = tds[1].getElementsByTagName('input')[0].value
     data.replace = tds[2].getElementsByTagName('input')[0].value
+    data.contentType = tds[3].getElementsByTagName('input')[0].value
     if (data.url !== '' && data.find !== '' && data.replace !== '') {
       replaceData.push(data);
     }
@@ -59,10 +60,12 @@ function addRow() {
   let cell2 = row.insertCell(1);
   let cell3 = row.insertCell(2);
   let cell4 = row.insertCell(3);
+  let cell5 = row.insertCell(4);
   cell1.innerHTML = '<input type="text"/>';
   cell2.innerHTML = '<input type="text"/>';
   cell3.innerHTML = '<input type="text"/>';
-  cell4.innerHTML = '<input type="button" value="Delete" class="delete"/>';
+  cell4.innerHTML = '<input type="text"/>';
+  cell5.innerHTML = '<input type="button" value="Delete" class="delete"/>';
   initDeleteEvent();
 }
 
@@ -105,10 +108,12 @@ function initTable() {
         var cell2 = row.insertCell(1);
         var cell3 = row.insertCell(2);
         var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
         cell1.innerHTML = `<input type="text" value="${escapeHTML(datum.url)}"/>`;
         cell2.innerHTML = `<input type="text" value="${escapeHTML(datum.find)}"/>`;
         cell3.innerHTML = `<input type="text" value="${escapeHTML(datum.replace)}"/>`;
-        cell4.innerHTML = `<input type="button" value="Delete" class="delete"/>`;
+        cell4.innerHTML = `<input type="text" value="${datum.contentType ? escapeHTML(datum.contentType) : ''}"/>`;
+        cell5.innerHTML = `<input type="button" value="Delete" class="delete"/>`;
       });
       initDeleteEvent();
     } else {
