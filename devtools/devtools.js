@@ -32,15 +32,14 @@ function checkURLTagged(url, replaceData) {
 }
 
 function submitResponse(filteredData, continueParams) {
-	let responseLines = [];
+  let responseLines = [];
   if (filteredData.contentType) {
     responseLines.push(`Content-Type: ${filteredData.contentType}`);
   }
-  responseLines.push('');
-  responseLines.push('');
-  responseLines.push(filteredData.replace);
-  continueParams.rawResponse = btoa(unescape(encodeURIComponent(responseLines.join('\r\n'))));
-  chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
+  continueParams.responseCode = 200;
+  continueParams.binaryResponseHeaders = btoa(`Content-Type: ${filteredData.contentType}`);
+  continueParams.body = btoa(unescape(encodeURIComponent(filteredData.replace)));
+  chrome.debugger.sendCommand(debugee, 'Fetch.fulfillRequest', continueParams);
 }
 
 let debugee = null;
@@ -48,42 +47,35 @@ function setupDebugger(target) {
   debugee = { tabId: target.id };
 
   chrome.debugger.attach(debugee, "1.0", () => {
-    chrome.debugger.sendCommand(debugee, "Network.setRequestInterception", { patterns: [{ urlPattern: '*' }] });
+    chrome.debugger.sendCommand(debugee, "Fetch.enable", { patterns: [{ urlPattern: '*' }] });
   });
 
   chrome.debugger.onEvent.addListener((source, method, params) => {
     var request = params.request;
     var continueParams = {
-      interceptionId: params.interceptionId,
+      requestId: params.requestId,
     };
     if (source.tabId === target.id) {
-      if (method === "Network.requestIntercepted") {
+      if (method === "Fetch.requestPaused") {
         chrome.storage.local.get("replaceData", (storageData) => {
           let filteredData = checkURLTagged(params.request.url, storageData.replaceData);
           if (filteredData.length > 0) {
-            var responseLines = [];
-            responseLines.push('HTTP/1.1 200 OK');
             if (filteredData[0].find === '~NO_API~') {
               submitResponse(filteredData[0], continueParams)
             } else {
               ajaxMe(request.url, (data) => {
                 replaceResponse(data.response, filteredData, (replacedData) => {
-                  let headers = data.getAllResponseHeaders();
-                  responseLines.push(headers);
-                  responseLines.push('');
-                  responseLines.push('');
-                  responseLines.push(replacedData);
-                  continueParams.rawResponse = btoa(unescape(encodeURIComponent(responseLines.join('\r\n'))));
-                  chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
+                  continueParams.responseCode = 200;
+                  continueParams.binaryResponseHeaders = btoa(unescape(encodeURIComponent(data.getAllResponseHeaders())));
+                  continueParams.body = btoa(unescape(encodeURIComponent(replacedData)));
+                  chrome.debugger.sendCommand(debugee, 'Fetch.fulfillRequest', continueParams);
                 });
               }, (status) => {
-                responseLInes[0] = `HTTP/1.1 ${status}`;
-                continecontinueParams.rawResponse = btoa(responseLines.join('\r\n'));
-                chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
+                chrome.debugger.sendCommand(debugee, 'Fetch.continueRequest', continueParams);
               });
             }
           } else {
-            chrome.debugger.sendCommand(debugee, 'Network.continueInterceptedRequest', continueParams);
+            chrome.debugger.sendCommand(debugee, 'Fetch.continueRequest', continueParams);
           }
         });
       }
