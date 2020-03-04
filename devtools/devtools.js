@@ -66,7 +66,7 @@ function setupDebugger(target) {
               ajaxMe(request.url, (data) => {
                 replaceResponse(data.response, filteredData, (replacedData) => {
                   continueParams.responseCode = 200;
-                  continueParams.binaryResponseHeaders = btoa(unescape(encodeURIComponent(data.getAllResponseHeaders())));
+                  continueParams.binaryResponseHeaders = btoa(unescape(encodeURIComponent(data.getAllResponseHeaders().replace(/(?:\r\n|\r|\n)/g, '\0'))));
                   continueParams.body = btoa(unescape(encodeURIComponent(replacedData)));
                   chrome.debugger.sendCommand(debugee, 'Fetch.fulfillRequest', continueParams);
                 });
