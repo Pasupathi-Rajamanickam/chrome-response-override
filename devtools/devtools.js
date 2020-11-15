@@ -8,16 +8,29 @@ chrome.devtools.panels.create("Response Override",
     panel.onShown.addListener(pinTab);
   }
 );
-function ajaxMe(url, success, error) {
-  let xhr = new XMLHttpRequest();
-  xhr.open('GET', url)
-  xhr.send();
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      success(xhr)
-    } else {
-      error(xhr.status)
-    }
+function getHeaderString(headers) {
+  let responseHeader = '';
+  headers.forEach((header, key) => {
+    responseHeader += key + ':' + header + '\n';
+  })
+  return responseHeader;
+}
+
+async function ajaxMe(url, headers, method, postData, success, error) {
+  let finalResponse = {};
+  let response = await fetch(url, {
+    method,
+    mode: 'cors',
+    headers,
+    redirect: 'follow',
+    body: postData
+  });
+  finalResponse.response = await response.text();
+  finalResponse.headers = getHeaderString(response.headers);
+  if (response.ok) {
+    success(finalResponse);
+  } else {
+    error(finalResponse);
   }
 }
 function replaceResponse(response, filteredData, callback) {
@@ -63,10 +76,10 @@ function setupDebugger(target) {
             if (filteredData[0].find === '~NO_API~') {
               submitResponse(filteredData[0], continueParams)
             } else {
-              ajaxMe(request.url, (data) => {
+              ajaxMe(request.url, request.headers, request.method, request.postData, (data) => {
                 replaceResponse(data.response, filteredData, (replacedData) => {
                   continueParams.responseCode = 200;
-                  continueParams.binaryResponseHeaders = btoa(unescape(encodeURIComponent(data.getAllResponseHeaders().replace(/(?:\r\n|\r|\n)/g, '\0'))));
+                  continueParams.binaryResponseHeaders = btoa(unescape(encodeURIComponent(data.headers.replace(/(?:\r\n|\r|\n)/g, '\0'))));
                   continueParams.body = btoa(unescape(encodeURIComponent(replacedData)));
                   chrome.debugger.sendCommand(debugee, 'Fetch.fulfillRequest', continueParams);
                 });
@@ -116,9 +129,3 @@ function pinTab(panelWindow) {
 function destroyDebugger() {
   chrome.debugger.detach(debugee);
 }
-
-
-
-
-
-
