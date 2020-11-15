@@ -99,7 +99,7 @@ function setupDebugger(target) {
 function setupActions() {
   extPanelWindow.addEventListener('message', (event) => {
     if (event.source !== extPanelWindow) {
-      returnl
+      return;
     }
     let message = event.data;
     if (message && message.source !== 'override-debug') {
