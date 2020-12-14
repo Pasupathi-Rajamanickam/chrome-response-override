@@ -1,5 +1,8 @@
 let extPanelWindow = null;
 let cureentStatus = 'Stopped';
+const SPECIAL_CASE_URL = {
+  NO_URI: '~NO_URI~'
+}
 
 chrome.devtools.panels.create("Response Override",
   "../images/icon.png",
@@ -12,7 +15,7 @@ function getHeaderString(headers) {
   let responseHeader = '';
   headers.forEach((header, key) => {
     responseHeader += key + ':' + header + '\n';
-  })
+  });
   return responseHeader;
 }
 
@@ -41,8 +44,14 @@ function replaceResponse(response, filteredData, callback) {
   callback(response)
 }
 function checkURLTagged(url, replaceData) {
-  return replaceData.filter(replaceDatum => url.includes(replaceDatum.url));
+  return replaceData.filter(replaceDatum =>  {
+    if (replaceDatum.url === SPECIAL_CASE_URL.NO_URI) {
+      return new URL(url).pathname === '/';
+    }
+    return url.includes(replaceDatum.url);
+  });
 }
+
 
 function submitResponse(filteredData, continueParams) {
   let responseLines = [];
