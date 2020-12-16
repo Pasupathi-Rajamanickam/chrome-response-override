@@ -7,7 +7,7 @@ Steps to override response body in chrome extension
 
 1) Open devtools, navigate to "Response Override" tab 
 2) Click "Add Row"
-3) Enter URL contains value only this URL response will be modified. If you want to modify URL in home page like www.example.com and no URI Path, use Special variable called ~NO_URI~ in URL contains field.
+3) Enter URL contains value only this URL response will be modified. If you want to modify URL in home page like www.example.com and no URI Path, use Special variable called `~NO_URI~` in URL contains field.
 4) Enter Find value It's a javascript regex pattern. 
 5) Enter Replace value to replace with. No need to provide content-type
 6) Click "Save" to save everything.
