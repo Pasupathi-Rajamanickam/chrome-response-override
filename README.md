@@ -21,11 +21,11 @@ If you want to add new node in json.
 Find: "existingNode":"existingValue" 
 Replace: "existingNode":"existingValue", "newNode": "newValue"
 
-If you want to modify URL in home page like on www.example.com page and no URI Path, use Special variable called ~NO_URI~ in URL contains field.
+If you want to modify URL in home page like on www.example.com page and no URI Path, use Special variable called `~NO_URI~` in URL contains field.
 
 Special Variable
-1. If you put "~NO_API~" (without ") in Find, no remote call will be made, provide full response. Provide content-type in this case.
-2. If you want to modify URL in home page like on www.example.com page and no URI Path, use Special variable called "~NO_URI~" (without ") in URL contains field.
+1. If you put `~NO_API~` in Find, no remote call will be made, provide full response. Provide content-type in this case.
+2. If you want to modify URL in home page like on www.example.com page and no URI Path, use Special variable called `~NO_URI~` in URL contains field.
 
 How This works: This devtools extension add network break point and listen to URL contains the user input Make API Client call and get response. Do Find and Replace on top of response. Serve the replaced response.
 
