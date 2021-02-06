@@ -1,5 +1,5 @@
 function init() {
-  document.addEventListener("DOMContentLoaded", function(event) {
+  document.addEventListener("DOMContentLoaded", function (event) {
     document.getElementById("start").addEventListener("click", () => {
       window.postMessage({
         action: 'start',
@@ -30,17 +30,15 @@ function init() {
 function saveData() {
   var table = document.getElementById("overrideTable");
   let replaceData = [];
-  let rows = table.getElementsByTagName('tr');
+  let rows = table.getElementsByClassName('request-item');
 
-  for (let i = 1; i < rows.length; i++) {
+  for (let i = 0; i < rows.length; i++) {
     let row = rows[i];
-    let tds = row.getElementsByTagName('td')
     let data = {};
-    data.url = tds[0].getElementsByTagName('input')[0].value
-    data.find = tds[1].getElementsByTagName('input')[0].value
-    data.replace = tds[2].getElementsByTagName('input')[0].value
-    data.contentType = tds[3].getElementsByTagName('input')[0].value
-    if (data.url !== '' && data.find !== '' && data.replace !== '') {
+    data.url = row.querySelector('.url').value
+    data.replace = row.querySelector('.replace').code.getValue()
+    data.contentType = row.querySelector('.content-type').value
+    if (data.url !== '' && data.replace !== '') {
       replaceData.push(data);
     }
   }
@@ -53,36 +51,35 @@ function saveData() {
 }
 
 function addRow() {
+  let container = document.createElement('div');
+  container.className = 'request-item';
   let table = document.getElementById('overrideTable');
-  const rowCount = table.getElementsByTagName('tr').length;
-  const row = table.insertRow(rowCount);
-  let cell1 = row.insertCell(0);
-  let cell2 = row.insertCell(1);
-  let cell3 = row.insertCell(2);
-  let cell4 = row.insertCell(3);
-  let cell5 = row.insertCell(4);
-  cell1.innerHTML = '<input type="text"/>';
-  cell2.innerHTML = '<input type="text"/>';
-  cell3.innerHTML = '<input type="text"/>';
-  cell4.innerHTML = '<input type="text"/>';
-  cell5.innerHTML = '<input type="button" value="Delete" class="delete"/>';
+  table.append(container);
+  container.innerHTML =
+    '<label>URL: </label><input class="url" type="text" placeholder="URL"/>' +
+    '<label>Content Type: </label><input class="content-type" type="text" placeholder="Content Type"/>' +
+    '<br/><input type="button" value="Delete?" class="delete"/><br/>' +
+    '<label>Replace: </label><br/><textarea class="replace"></textarea><hr/>';
+
+  var code = CodeMirror.fromTextArea(container.getElementsByTagName('textarea')[0], {
+    lineNumbers: true,
+  });
+  container.getElementsByTagName('textarea')[0].code = code;
   initDeleteEvent();
 }
 
 function cleanTable() {
   let table = document.getElementById('overrideTable');
-  let rows = table.getElementsByTagName('tr');
+  let rows = table.getElementsByClassName('request-item');
 
   for (let i = rows.length - 1; i >= 0; i--) {
     let row = rows[i];
-    if (row.getElementsByTagName('th').length === 0) {
-      row.parentNode.removeChild(row);
-    }
+    row.remove();
   }
 }
 
 function deleteRow(evt) {
-  evt.target.parentNode.parentNode.parentNode.removeChild(evt.target.parentNode.parentNode);
+  evt.target.parentNode.remove();
   saveData();
 }
 
@@ -92,7 +89,6 @@ function initDeleteEvent() {
   for (var i = 0; i < elements.length; i++) {
     elements[i].removeEventListener('click', deleteRow, false);
     elements[i].addEventListener('click', deleteRow, false);
-
   }
 }
 
@@ -102,18 +98,19 @@ function initTable() {
       var table = document.getElementById("overrideTable");
       cleanTable();
       data.replaceData.forEach((datum) => {
-        let rowCount = table.getElementsByTagName('tr').length;
-        let row = table.insertRow(rowCount);
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-        var cell5 = row.insertCell(4);
-        cell1.innerHTML = `<input type="text" value="${escapeHTML(datum.url)}"/>`;
-        cell2.innerHTML = `<input type="text" value="${escapeHTML(datum.find)}"/>`;
-        cell3.innerHTML = `<input type="text" value="${escapeHTML(datum.replace)}"/>`;
-        cell4.innerHTML = `<input type="text" value="${datum.contentType ? escapeHTML(datum.contentType) : ''}"/>`;
-        cell5.innerHTML = `<input type="button" value="Delete" class="delete"/>`;
+        let container = document.createElement('div');
+        container.className = 'request-item';
+        table.append(container);
+        container.innerHTML =
+          `<label>URL: </label><input class="url" type="text" value="${escapeHTML(datum.url)}" placeholder="URL"/>` +
+          `<label>Content Type: </label><input class="content-type" type="text" value="${datum.contentType ? escapeHTML(datum.contentType) : ''}" placeholder="Content Type"/>` +
+          '<br/><input type="button" value="Delete?" class="delete"/><br/>' +
+          `<label>Replace: </label><br/><textarea class="replace">${escapeHTML(datum.replace)}</textarea><hr/>`;
+
+        var code = CodeMirror.fromTextArea(container.getElementsByTagName('textarea')[0], {
+          lineNumbers: true,
+        });
+        container.getElementsByTagName('textarea')[0].code = code;
       });
       initDeleteEvent();
     } else {

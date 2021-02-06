@@ -1,40 +1,38 @@
 <html>
+
 <head>
-<link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="codemirror.css">
 </head>
+
 <body style="background: #f0ffff">
-<div>
-<span style="display:table-cell;padding:10px;">
-<image style="height:32px" src="../images/icon.png">
-</span>
+    <div>
+        <span style="display:table-cell;padding:10px;">
+            <image style="height:32px" src="../images/icon.png">
+        </span>
 
-<span style="display:table-cell;vertical-align:middle;padding:10px"><b>Chrome Response override</b>
-</span>
-</div>
+        <span style="display:table-cell;vertical-align:middle;padding:10px"><b>Chrome Response override</b>
+        </span>
+    </div>
 
-<table>
-<tr>
-<td><input type="button" value=">" id="start"/>
-<input type="button" value="||" id="stop"/>
-<input type="button" value="Save" id="save"/>
-<input type="button" value="Clean" id="clean"/>
-<input type="button" value="Add Row" id="addRow"/>
-<a target="_blank" href="https://github.com/Pasupathi-Rajamanickam/chrome-response-override/wiki">Wiki</a>
-</td>
-</tr>
-</table>
+    <table>
+        <tr>
+            <td><input type="button" value=">" id="start" />
+                <input type="button" value="||" id="stop" />
+                <input type="button" value="Save" id="save" />
+                <input type="button" value="Clean" id="clean" />
+                <input type="button" value="Add Row" id="addRow" />
+                <a target="_blank"
+                    href="https://github.com/Pasupathi-Rajamanickam/chrome-response-override/wiki">Wiki</a>
+            </td>
+        </tr>
+    </table>
 
-<table id="overrideTable">
-<tr>
-<th>URL Contains</th>
-<th>Find</th>
-<th>Replace</th>
-<th>Content-Type</th>
-<th>Delete</th>
-</tr>
-</table>
-<div style="color:green" id="saveMessage"></div>
+    <div id="overrideTable">
+    </div>
+    <div style="color:green" id="saveMessage"></div>
 </body>
-<script src="panel.js">
-</script>
+<script src="panel.js"></script>
+<script src="codemirror.js"></script>
+
 </html>

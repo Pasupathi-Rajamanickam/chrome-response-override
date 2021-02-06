@@ -38,8 +38,7 @@ async function ajaxMe(url, headers, method, postData, success, error) {
 }
 function replaceResponse(response, filteredData, callback) {
   filteredData.forEach(filteredDatum => {
-    var find = new RegExp(filteredDatum.find, "g");
-    response = response.replace(find, filteredDatum.replace)
+    response = filteredDatum.replace
   })
   callback(response)
 }
