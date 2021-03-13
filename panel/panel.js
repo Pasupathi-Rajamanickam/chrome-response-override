@@ -19,6 +19,31 @@ function init() {
       let replaceData = [];
       chrome.storage.local.set({ replaceData }, initTable);
     });
+    document.getElementById('import').addEventListener('click', () => {
+      var fileInput = document.getElementById('file');
+      fileInput.click();
+      fileInput.onchange = (event) => {
+        const file = fileInput.files[0];
+        if (file) {
+          let reader = new FileReader();
+          reader.addEventListener('load', (event) => {
+            const parsed = JSON.parse(event.target.result);
+            
+            chrome.storage.local.set(parsed, () => {
+              initTable();
+            });
+          });
+          
+          reader.readAsText(file, 'utf-8');
+        }
+      }
+    });
+    document.getElementById('export').addEventListener('click', () => {
+      chrome.runtime.sendMessage({
+        source: 'configuration',
+        action: 'export'
+      })
+    });
     document.getElementById("addRow").addEventListener("click", () => {
       addRow();
     });
