@@ -127,9 +127,10 @@ function setupActions() {
 }
 
 function startOverride() {
-  chrome.tabs.getSelected(null, (tab) => {
-    setupDebugger(tab);
-  });
+    let queryOptions = { active: true, currentWindow: true };
+    chrome.tabs.query(queryOptions, (tab) => {
+      setupDebugger(tab[0]);
+    });
 }
 function pinTab(panelWindow) {
   extPanelWindow = panelWindow;
