@@ -3,7 +3,16 @@ Chrome devtools extension to modify response on the fly, no external app install
 
 Provide support to override API/HTML/* response using simple Find & Replace steps. No external app installation required.
 
-Steps to override response body in chrome extension
+## Install Plugin
+* Install from chrome web store - https://chrome.google.com/webstore/detail/chrome-response-override/kbipbobgpnhgghikihmodppmfbkbmgfj
+* Close all devtools and open new devtools by pressing F12 or by navigating through developer menu or by right click on page and inspect element.
+* You might see new tab called "Response Override" added 
+<img width="408" alt="image" src="https://user-images.githubusercontent.com/12167873/196017955-f7d44515-05ea-4b74-9561-d38c1d3dfd40.png">
+
+* Click on Response Override tab and proceed further steps.
+
+
+## Steps to override response body in chrome extension
 
 1) Open devtools, navigate to "Response Override" tab 
 2) Click "Add Row"
@@ -23,7 +32,7 @@ Replace: "existingNode":"existingValue", "newNode": "newValue"
 
 If you want to modify URL in home page like on www.example.com page and no URI Path, use Special variable called `~NO_URI~` in URL contains field.
 
-Special Variable
+## Special Variable
 1. If you put `~NO_API~` in Find, no remote call will be made, provide full response. Provide content-type in this case.
 2. If you want to modify URL in home page like on www.example.com page and no URI Path, use Special variable called `~NO_URI~` in URL contains field.
 
