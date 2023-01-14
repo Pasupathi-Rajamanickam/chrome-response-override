@@ -39,3 +39,12 @@ tr:nth-child(even) {background-color:#dee4dc;}
   font-weight: bold;
   cursor: pointer;
 }
+
+.config-row  td{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.config-row input {
+  padding: 0 8px;
+}

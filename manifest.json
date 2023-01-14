@@ -5,13 +5,22 @@
   "description": "Provides support to override API/HTML/* response using simple Find & Replace steps. No external app installation required",
   "author": "Pasupathi Rajamanickam",
   "devtools_page": "devtools/devtools.html",
+  "background" : {
+    "page": "background/background.html"
+  },
   "permissions": [
     "debugger",
     "tabs",
     "storage",
     "http://*/*",
-    "https://*/*"
+    "https://*/*",
+    "downloads",
+    "background",
+    "fileBrowserHandler"
   ],
+  "file_system_provider_capabilities": {
+    "source": "device"
+  },
   "manifest_version": 2,
   "icons": {
     "16": "images/icon16.png",
